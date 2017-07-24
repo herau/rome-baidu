@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
@@ -33,22 +34,28 @@ public class RomeTest {
     @Test
     public void syndFeedInput_build() throws IOException, FeedException {
         System.out.println("test with RSS : " + url);
+        HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
+        urlConnection.setRequestProperty("Accept", "*/*");
+        urlConnection.setRequestProperty("User-Agent", "curl/7.47.0");
+        try {
+            SyndFeed feed = new SyndFeedInput().build(new XmlReader(urlConnection));
 
-        SyndFeed feed = new SyndFeedInput().build(new XmlReader(new URL(url)));
+            feed.getEntries().forEach(feedEntry -> {
+                SyndEntryImpl entry = (SyndEntryImpl) feedEntry;
 
-        feed.getEntries().forEach(feedEntry -> {
-            SyndEntryImpl entry = (SyndEntryImpl) feedEntry;
+                Date publishedDate = entry.getPublishedDate();
+                System.out.println("published date: " + publishedDate);
 
-            Date publishedDate = entry.getPublishedDate();
-            System.out.println("published date: " + publishedDate);
+                String title = entry.getTitle();
+                System.out.println("title: " + title);
 
-            String title = entry.getTitle();
-            System.out.println("title: " + title);
+                String description = entry.getDescription().getValue();
+                System.out.println("description: " + description);
 
-            String description = entry.getDescription().getValue();
-            System.out.println("description: " + description);
-
-            System.out.println("\n");
-        });
+                System.out.println("\n");
+            });
+        } finally {
+          urlConnection.disconnect();
+        }
     }
 }
