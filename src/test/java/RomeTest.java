@@ -55,7 +55,7 @@ public class RomeTest {
                 System.out.println("\n");
             });
         } finally {
-          urlConnection.disconnect();
+            urlConnection.disconnect();
         }
     }
 }
