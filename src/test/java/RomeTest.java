@@ -21,8 +21,7 @@ public class RomeTest {
 
     @Parameterized.Parameters
     public static Iterable<? extends Object> data() {
-        return Arrays.asList("http://www.lemonde.fr/m-actu/rss_full.xml",
-                             "http://news.baidu.com/ns?cl=2&rn=20&tn=newsrss&word=football");
+        return Arrays.asList("http://news.baidu.com/ns?word=%CC%BC%CF%CB%CE%AC%2Bgasgoo&tn=newsrss&sr=0&cl=2&rn=20&ct=0");
     }
 
     private String url;
